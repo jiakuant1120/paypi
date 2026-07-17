@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 
 import { getIconUrlFromIssuer } from "@shared/api/helpers/getIconUrlFromIssuer";
 import { ClassicAsset, NativeAsset } from "@shared/api/types/account-balance";
+import { NATIVE_TOKEN_CODE } from "@shared/constants/stellar";
 
 import { settingsNetworkDetailsSelector } from "popup/ducks/settings";
 import { CopyValue } from "popup/components/CopyValue";
@@ -79,7 +80,7 @@ export const AssetNetworkInfo = ({
             displayValue={displaySorobanId(contractId, 28)}
           />
         ) : (
-          <span>{assetDomain || "XLM"}</span>
+          <span>{assetDomain || NATIVE_TOKEN_CODE}</span>
         )}
       </>
     </div>

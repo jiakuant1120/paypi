@@ -41,7 +41,7 @@ export const CLASSIC_ASSET_DECIMALS = 7;
 /**
  * Gets the correct decimals for an asset.
  * For Soroban contracts, fetches decimals via RPC.
- * For native XLM and classic assets, returns CLASSIC_ASSET_DECIMALS (7) without throwing.
+ * For native PI and classic assets, returns CLASSIC_ASSET_DECIMALS (7) without throwing.
  *
  * @throws Error if the RPC call succeeds but returns no decimals (only for Soroban contracts)
  * @param params - Parameters object
@@ -75,7 +75,7 @@ export const getDecimalsForAsset = async ({
     throw new Error(`Unable to fetch decimals for contract ${assetIssuer}`);
   }
 
-  // For native XLM and classic assets, return standard decimals
+  // For native PI and classic assets, return standard decimals
   return CLASSIC_ASSET_DECIMALS;
 };
 
@@ -206,7 +206,7 @@ export const getContractIdFromTransactionData = ({
 /**
  * Extracts contract ID from a token ID string.
  * Token ID format:
- * - "native" for XLM
+ * - "native" for PI
  * - "CODE:ISSUER" for classic tokens
  * - Contract address for Soroban tokens
  * - "SYMBOL:CONTRACTID" for Soroban tokens with symbol
@@ -281,7 +281,7 @@ export const getAvailableBalance = ({
 
     const balance = selectedBalance.total;
     if ("minimumBalance" in selectedBalance && selectedBalance.minimumBalance) {
-      // take base reserve into account for XLM payments
+      // take base reserve into account for native payments
       const minBalance = selectedBalance.minimumBalance;
       const currentBal = new BigNumber(balance.toFixed());
       const available = currentBal
@@ -882,7 +882,7 @@ export const isSacContract = (
 /**
  * Determines if an asset is a Stellar Asset Contract (SAC).
  * SAC assets include:
- * 1. The native XLM contract
+ * 1. The native PI contract
  * 2. Classic Stellar assets that have been wrapped as Soroban contracts
  *
  * @param asset - Asset details
@@ -906,7 +906,7 @@ export const isAssetSac = ({
 
   const nativeContract = getNativeContractDetails(networkDetails);
 
-  // Check if it's the native XLM contract
+  // Check if it's the native PI contract
   if (asset.contract === nativeContract.contract) {
     return true;
   }

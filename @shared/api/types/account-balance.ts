@@ -5,7 +5,7 @@ import { AssetType as SdkAssetType, Horizon } from "stellar-sdk";
 export interface NativeAsset {
   token: {
     type: SdkAssetType.native;
-    code: "XLM";
+    code: string;
   };
   available: BigNumber;
   total: BigNumber;

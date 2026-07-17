@@ -4,6 +4,7 @@ import { isEmpty } from "lodash";
 
 import { AssetIcon } from "popup/components/account/AccountAssets";
 import { AssetIcons } from "@shared/api/types";
+import { NATIVE_TOKEN_CODE } from "@shared/constants/stellar";
 import { formatAmount, roundUsdValue } from "popup/helpers/formatters";
 import { getPriceDeltaColor } from "popup/helpers/balance";
 import { getCanonicalFromAsset } from "helpers/stellar";
@@ -62,14 +63,14 @@ export const BalanceRow = ({
   const hasFiat = fiatAmount !== undefined && fiatAmount !== null;
 
   // AssetIcon shows a perpetual loading state when assetIcons is empty (and the
-  // asset isn't XLM). Callers that pass a single iconUrl (e.g. the swap picker's
+  // asset isn't native). Callers that pass a single iconUrl (e.g. the swap picker's
   // held list) would otherwise hit that; synthesize a one-entry map for them.
-  const canonical =
-    code === "XLM" && !issuerKey
-      ? "native"
-      : getCanonicalFromAsset(code, issuerKey);
+  const isNative = (code === NATIVE_TOKEN_CODE || code === "XLM") && !issuerKey;
+  const canonical = isNative
+    ? "native"
+    : getCanonicalFromAsset(code, issuerKey);
   const resolvedIcons =
-    code !== "XLM" && isEmpty(assetIcons)
+    !isNative && isEmpty(assetIcons)
       ? { [canonical]: iconUrl ?? "" }
       : assetIcons;
   const deltaColor = hasDelta

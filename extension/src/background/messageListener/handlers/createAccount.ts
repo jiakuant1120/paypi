@@ -19,8 +19,9 @@ import {
   publicKeySelector,
   reset,
 } from "background/ducks/session";
+import { derivePiKeyPair } from "background/helpers/piKeypair";
 
-const { fromMnemonic, generateMnemonic } = StellarHDWallet;
+const { generateMnemonic } = StellarHDWallet;
 
 export const createAccount = async ({
   request,
@@ -43,17 +44,16 @@ export const createAccount = async ({
   }
 
   const mnemonicPhrase = generateMnemonic({ entropyBits: 128 });
-  const wallet = fromMnemonic(mnemonicPhrase);
 
   const KEY_DERIVATION_NUMBER = 0;
   const keyId = KEY_DERIVATION_NUMBER.toString();
 
   await localStore.setItem(KEY_DERIVATION_NUMBER_ID, keyId);
 
-  const keyPair = {
-    publicKey: wallet.getPublicKey(KEY_DERIVATION_NUMBER),
-    privateKey: wallet.getSecret(KEY_DERIVATION_NUMBER),
-  };
+  const keyPair = derivePiKeyPair({
+    mnemonicPhrase,
+    index: KEY_DERIVATION_NUMBER,
+  });
 
   await clearSession({ localStore, sessionStore });
 

@@ -1,7 +1,7 @@
 import { useReducer } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { NetworkDetails } from "@shared/constants/stellar";
+import { NATIVE_TOKEN_CODE, NetworkDetails } from "@shared/constants/stellar";
 import { Balance } from "@shared/api/types";
 import { initialState, isError, reducer } from "helpers/request";
 
@@ -110,7 +110,7 @@ export function useGetAssetDomainsWithBalances(getBalancesOptions: {
           continue;
         }
 
-        if (code !== "XLM") {
+        if (code !== NATIVE_TOKEN_CODE && code !== "XLM") {
           let domain = "";
 
           const cachedHomeDomain =

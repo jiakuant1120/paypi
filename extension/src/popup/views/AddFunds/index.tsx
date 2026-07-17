@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Icon, Text } from "@stellar/design-system";
 
+import { NATIVE_TOKEN_CODE } from "@shared/constants/stellar";
 import { SubviewHeader } from "popup/components/SubviewHeader";
 import { Loading } from "popup/components/Loading";
 import { View } from "popup/basics/layout/View";
@@ -26,7 +27,9 @@ export const AddFunds = () => {
     isLoading: isTokenRequestLoading,
     fetchData,
     tokenError,
-  } = useGetOnrampToken({ ...(isAddXlm ? { asset: "XLM" } : {}) });
+  } = useGetOnrampToken({
+    ...(isAddXlm ? { asset: NATIVE_TOKEN_CODE } : {}),
+  });
 
   const handleOnrampClick = async () => {
     await fetchData();

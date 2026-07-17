@@ -1,5 +1,8 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { PASSPHRASE_TO_NETWORK_NAME } from "@shared/constants/stellar";
+import {
+  NATIVE_TOKEN_CODE,
+  PASSPHRASE_TO_NETWORK_NAME,
+} from "@shared/constants/stellar";
 import { Navigate, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useTranslation, Trans } from "react-i18next";
@@ -363,13 +366,14 @@ export const SignTransaction = () => {
 
   const { currentAccount } = signTxState.data?.signFlowState!;
 
-  // Check if user has enough XLM for the fee - skip warning if balances unavailable
+  // Check if user has enough native balance for the fee - skip warning if balances unavailable
   const balances = signTxState.data?.balances;
   const hasEnoughXlm = balances
     ? balances.balances.some(
         (balance) =>
           "token" in balance &&
-          balance.token.code === "XLM" &&
+          (balance.token.code === NATIVE_TOKEN_CODE ||
+            balance.token.code === "XLM") &&
           (balance as NativeAsset).available.gt(stroopToXlm(_fee as string)),
       )
     : true; // If balances unavailable, assume user can proceed
@@ -388,7 +392,7 @@ export const SignTransaction = () => {
       >
         <p data-testid="InsufficientBalanceWarning">
           <Trans domain={domain}>
-            Your available XLM balance is not enough to pay for the transaction
+            Your available PI balance is not enough to pay for the transaction
             fee.
           </Trans>
         </p>
@@ -525,7 +529,7 @@ export const SignTransaction = () => {
                       </div>
                       <div className="SignTransaction__Metadata__Value">
                         <span>
-                          {`${formatTokenAmount(new BigNumber(_fee), CLASSIC_ASSET_DECIMALS)} XLM `}
+                          {`${formatTokenAmount(new BigNumber(_fee), CLASSIC_ASSET_DECIMALS)} ${NATIVE_TOKEN_CODE} `}
                         </span>
                       </div>
                     </div>
@@ -754,7 +758,9 @@ const AssetDiffs = ({ assetDiffs, icons }: AssetDiffsProps) => {
       <div className="SignTransaction__AssetDiffRow">
         <div className="SignTransaction__AssetDiffRow__Asset">
           <AssetIcon
-            assetIcons={code !== "XLM" ? icons : {}}
+            assetIcons={
+              code !== NATIVE_TOKEN_CODE && code !== "XLM" ? icons : {}
+            }
             code={code}
             issuerKey={issuer}
           />
@@ -797,7 +803,9 @@ export const Trustline = ({ operations, icons }: TrustlineProps) => {
         return (
           <>
             <AssetIcon
-              assetIcons={code !== "XLM" ? icons : {}}
+              assetIcons={
+                code !== NATIVE_TOKEN_CODE && code !== "XLM" ? icons : {}
+              }
               code={code}
               issuerKey={issuer}
             />

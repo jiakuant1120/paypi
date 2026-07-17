@@ -2,6 +2,10 @@ import { NetworkDetails } from "@shared/constants/stellar";
 import { TrendingAsset } from "@shared/api/types";
 import { getApiStellarExpertUrl } from "popup/helpers/account";
 import { isTestnet } from "helpers/stellar";
+import {
+  getPiTokenRegistryUrl,
+  piTokenListToTrendingAssets,
+} from "@shared/api/helpers/pi-token-list";
 
 // Re-exported so existing `popup/helpers/trendingAssets` imports keep resolving.
 export type { TrendingAsset };
@@ -26,6 +30,19 @@ export const fetchTrendingAssets = async ({
   networkDetails: NetworkDetails;
   signal?: AbortSignal;
 }): Promise<TrendingAsset[]> => {
+  const piTokenRegistryUrl = getPiTokenRegistryUrl({
+    networkDetails,
+    popular: true,
+    limit: TRENDING_LIMIT,
+  });
+  if (piTokenRegistryUrl) {
+    const res = await fetch(piTokenRegistryUrl, { signal });
+    if (!res.ok) {
+      throw new Error(res.statusText);
+    }
+    return piTokenListToTrendingAssets(await res.json());
+  }
+
   const base = `${getApiStellarExpertUrl(networkDetails)}/asset`;
   const testnet = isTestnet(networkDetails);
   // On testnet volume7d is always 0, so sorting by it is meaningless — omit the

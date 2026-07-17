@@ -1,9 +1,7 @@
-import { Networks } from "stellar-sdk";
-
 export enum NETWORK_NAMES {
-  TESTNET = "Test Net",
-  PUBNET = "Main Net",
-  FUTURENET = "Future Net",
+  TESTNET = "Pi Testnet",
+  PUBNET = "Pi Mainnet",
+  FUTURENET = "Pi Testnet2",
 }
 
 export enum NETWORKS {
@@ -13,27 +11,34 @@ export enum NETWORKS {
 }
 
 export enum NETWORK_URLS {
-  PUBLIC = "https://horizon.stellar.org",
-  TESTNET = "https://horizon-testnet.stellar.org",
-  FUTURENET = "https://horizon-futurenet.stellar.org",
+  PUBLIC = "https://api.mainnet.minepi.com",
+  TESTNET = "https://api.testnet.minepi.com",
+  FUTURENET = "https://api.testnet2.minepi.com",
 }
 
 export enum FRIENDBOT_URLS {
-  TESTNET = "https://friendbot.stellar.org",
-  FUTURENET = "https://friendbot-futurenet.stellar.org",
+  TESTNET = "",
+  FUTURENET = "",
 }
 
 export const SOROBAN_RPC_URLS: { [key in NETWORKS]: string } = {
-  [NETWORKS.PUBLIC]: "http://stellar-rpc-pubnet-prd:8000",
-  [NETWORKS.TESTNET]: "https://soroban-testnet.stellar.org/",
-  [NETWORKS.FUTURENET]: "https://rpc-futurenet.stellar.org/",
+  [NETWORKS.PUBLIC]: "https://rpc.mainnet.minepi.com",
+  [NETWORKS.TESTNET]: "https://rpc.testnet.minepi.com",
+  [NETWORKS.FUTURENET]: "https://rpc.testnet.minepi.com",
 };
+
+export const NATIVE_TOKEN_CODE = "PI";
+
+export const NETWORK_PASSPHRASES = {
+  PUBLIC: "Pi Network",
+  TESTNET: "Pi Testnet",
+  FUTURENET: "Pi Testnet",
+} as const;
 
 export interface NetworkDetails {
   network: string;
   networkName: string;
   networkUrl: string;
-  // TODO: Should be Networks
   networkPassphrase: string;
   friendbotUrl?: string;
   sorobanRpcUrl?: string;
@@ -43,7 +48,7 @@ export const MAINNET_NETWORK_DETAILS: NetworkDetails = {
   network: NETWORKS.PUBLIC,
   networkName: NETWORK_NAMES.PUBNET,
   networkUrl: NETWORK_URLS.PUBLIC,
-  networkPassphrase: Networks.PUBLIC,
+  networkPassphrase: NETWORK_PASSPHRASES.PUBLIC,
   sorobanRpcUrl: SOROBAN_RPC_URLS.PUBLIC,
 };
 
@@ -51,7 +56,7 @@ export const TESTNET_NETWORK_DETAILS: NetworkDetails = {
   network: NETWORKS.TESTNET,
   networkName: NETWORK_NAMES.TESTNET,
   networkUrl: NETWORK_URLS.TESTNET,
-  networkPassphrase: Networks.TESTNET,
+  networkPassphrase: NETWORK_PASSPHRASES.TESTNET,
   sorobanRpcUrl: SOROBAN_RPC_URLS[NETWORKS.TESTNET],
   friendbotUrl: FRIENDBOT_URLS.TESTNET,
 };
@@ -60,7 +65,7 @@ export const FUTURENET_NETWORK_DETAILS: NetworkDetails = {
   network: NETWORKS.FUTURENET,
   networkName: NETWORK_NAMES.FUTURENET,
   networkUrl: NETWORK_URLS.FUTURENET,
-  networkPassphrase: "Test SDF Future Network ; October 2022",
+  networkPassphrase: NETWORK_PASSPHRASES.FUTURENET,
   sorobanRpcUrl: SOROBAN_RPC_URLS[NETWORKS.FUTURENET],
   friendbotUrl: FRIENDBOT_URLS.FUTURENET,
 };
@@ -70,19 +75,19 @@ export const DEFAULT_NETWORKS: Array<NetworkDetails> = [
   TESTNET_NETWORK_DETAILS,
 ];
 
-export const BASE_RESERVE = 0.5 as const;
+export const BASE_RESERVE = 0.49 as const;
 export const BASE_RESERVE_MIN_COUNT = 2 as const;
 
 export const PASSPHRASE_TO_NETWORK_NAME: Record<string, string> = {
-  [Networks.PUBLIC]: NETWORK_NAMES.PUBNET,
-  [Networks.TESTNET]: NETWORK_NAMES.TESTNET,
+  [NETWORK_PASSPHRASES.PUBLIC]: NETWORK_NAMES.PUBNET,
+  [NETWORK_PASSPHRASES.TESTNET]: NETWORK_NAMES.TESTNET,
   [FUTURENET_NETWORK_DETAILS.networkPassphrase]: NETWORK_NAMES.FUTURENET,
 };
 
-// The token-prices endpoint only supports pubnet and testnet. This map is the
+// The token-prices endpoint only supports mainnet and testnet. This map is the
 // single source of truth for which passphrases resolve to a price-supported
 // network; anything not listed here is skipped by getTokenPrices.
 export const PASSPHRASE_TO_PRICE_NETWORK: Record<string, NETWORKS> = {
-  [Networks.PUBLIC]: NETWORKS.PUBLIC,
-  [Networks.TESTNET]: NETWORKS.TESTNET,
+  [NETWORK_PASSPHRASES.PUBLIC]: NETWORKS.PUBLIC,
+  [NETWORK_PASSPHRASES.TESTNET]: NETWORKS.TESTNET,
 };

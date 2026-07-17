@@ -8,6 +8,7 @@ import {
   AssetType,
   LiquidityPoolShareAsset,
 } from "@shared/api/types/account-balance";
+import { NATIVE_TOKEN_CODE } from "@shared/constants/stellar";
 import { getCanonicalFromAsset } from "helpers/stellar";
 import { ApiTokenPrices, AssetIcons } from "@shared/api/types";
 import { getAvailableBalance } from "popup/helpers/soroban";
@@ -105,7 +106,11 @@ export const TokenList = ({
                 >
                   <div className="TokenList__AssetRow__Body">
                     <AssetIcon
-                      assetIcons={code !== "XLM" ? { [canonical]: icon } : {}}
+                      assetIcons={
+                        code !== NATIVE_TOKEN_CODE && code !== "XLM"
+                          ? { [canonical]: icon }
+                          : {}
+                      }
                       code={code}
                       issuerKey={issuerKey!}
                       icon={icon}
@@ -113,7 +118,7 @@ export const TokenList = ({
                     />
                     <div className="TokenList__AssetRow__Title">
                       <div className="TokenList__AssetRow__Title__Heading">
-                        {isNative ? t("Stellar Lumens") : title(balance)}
+                        {isNative ? NATIVE_TOKEN_CODE : title(balance)}
                       </div>
                       <div
                         className="TokenList__AssetRow__Title__Total"

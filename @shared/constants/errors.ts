@@ -1,5 +1,5 @@
 export class NoExtensionInstalledError extends Error {
-  message = "Freighter does not appear to be installed.";
+  message = "PayPi does not appear to be installed.";
 }
 
 export class SorobanRpcNotSupportedError extends Error {

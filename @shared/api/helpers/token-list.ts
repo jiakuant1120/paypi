@@ -13,6 +13,10 @@ import {
   TESTNET_NETWORK_DETAILS,
 } from "@shared/constants/stellar";
 import { CUSTOM_NETWORK } from "@shared/helpers/stellar";
+import {
+  isPiTokenRegistryUrl,
+  piTokenListToAssetList,
+} from "@shared/api/helpers/pi-token-list";
 
 const SEP_0042_SCHEMA_URL =
   "https://raw.githubusercontent.com/orbitlens/stellar-protocol/sep-0042-token-lists/contents/sep-0042/assetlist.schema.json";
@@ -169,7 +173,7 @@ export const getCombinedAssetListData = async ({
   for (const networkList of networkLists) {
     const { url = "", isEnabled } = networkList;
 
-    if (isEnabled) {
+    if (isEnabled && url) {
       const fetchAndParse = async () => {
         let res;
         try {
@@ -186,7 +190,11 @@ export const getCombinedAssetListData = async ({
         }
 
         try {
-          return await res.json();
+          const json = await res.json();
+          if (isPiTokenRegistryUrl(url)) {
+            return piTokenListToAssetList({ response: json, network });
+          }
+          return json;
         } catch (e) {
           captureException(
             `Failed to parse asset list JSON: ${url} - ${JSON.stringify(e)}`,

@@ -2,6 +2,7 @@ import {
   AssetType,
   LiquidityPoolShareAsset,
 } from "@shared/api/types/account-balance";
+import { NATIVE_TOKEN_CODE } from "@shared/constants/stellar";
 import BigNumber from "bignumber.js";
 
 export enum AMOUNT_ERROR {
@@ -22,7 +23,7 @@ export const computeDestMinWithSlippage = (
 
 export const title = (balance: Exclude<AssetType, LiquidityPoolShareAsset>) => {
   if ("type" in balance.token && balance.token.type === "native") {
-    return "XLM";
+    return NATIVE_TOKEN_CODE;
   }
   if ("symbol" in balance) {
     return balance.symbol;

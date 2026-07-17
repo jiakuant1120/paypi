@@ -1,4 +1,5 @@
 import { NETWORKS } from "@shared/constants/stellar";
+import { INDEXER_V2_URL } from "@shared/constants/mercury";
 
 export type AssetsListKey = NETWORKS.PUBLIC | NETWORKS.TESTNET;
 
@@ -11,25 +12,28 @@ export interface AssetsListItem {
   isEnabled: boolean;
 }
 
+const getPiTokenListUrl = (network: NETWORKS.PUBLIC | NETWORKS.TESTNET) => {
+  if (!INDEXER_V2_URL) {
+    return "";
+  }
+
+  const url = new URL(`${INDEXER_V2_URL}/pi-tokens`);
+  url.searchParams.set("network", network);
+  url.searchParams.set("limit", "200");
+  return url.toString();
+};
+
 export const DEFAULT_ASSETS_LISTS: AssetsLists = {
   [NETWORKS.PUBLIC]: [
     {
-      url: "https://api.stellar.expert/explorer/public/asset-list/top50",
-      isEnabled: true,
-    },
-    {
-      url: "https://raw.githubusercontent.com/soroswap/token-list/main/tokenList.json",
-      isEnabled: true,
-    },
-    {
-      url: "https://lobstr.co/api/v1/sep/assets/curated.json",
-      isEnabled: true,
+      url: getPiTokenListUrl(NETWORKS.PUBLIC),
+      isEnabled: Boolean(INDEXER_V2_URL),
     },
   ],
   [NETWORKS.TESTNET]: [
     {
-      url: "https://api.stellar.expert/explorer/testnet/asset-list/top50",
-      isEnabled: true,
+      url: getPiTokenListUrl(NETWORKS.TESTNET),
+      isEnabled: Boolean(INDEXER_V2_URL),
     },
   ],
 };

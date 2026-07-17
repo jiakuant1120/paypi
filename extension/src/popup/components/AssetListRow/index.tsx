@@ -1,5 +1,6 @@
 import React from "react";
 
+import { NATIVE_TOKEN_CODE } from "@shared/constants/stellar";
 import { AssetIcon } from "popup/components/account/AccountAssets";
 import { formatDomain, getCanonicalFromAsset } from "helpers/stellar";
 import { truncateString } from "helpers/stellar";
@@ -50,8 +51,8 @@ export const AssetListRow = ({
   codeTestId,
   domainTestId,
 }: AssetListRowProps) => {
-  const canonical =
-    code === "XLM" && !issuer ? "native" : getCanonicalFromAsset(code, issuer);
+  const isNative = (code === NATIVE_TOKEN_CODE || code === "XLM") && !issuer;
+  const canonical = isNative ? "native" : getCanonicalFromAsset(code, issuer);
   const label = displayCode ?? code;
   const displayLabel = label.length > 20 ? truncateString(label) : label;
 
@@ -64,7 +65,7 @@ export const AssetListRow = ({
         role={onClick ? "button" : undefined}
       >
         <AssetIcon
-          assetIcons={code !== "XLM" ? { [canonical]: iconUrl || "" } : {}}
+          assetIcons={!isNative ? { [canonical]: iconUrl || "" } : {}}
           code={code}
           issuerKey={issuer}
           icon={iconUrl || undefined}

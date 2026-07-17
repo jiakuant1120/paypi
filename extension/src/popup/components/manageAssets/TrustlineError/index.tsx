@@ -7,6 +7,7 @@ import BigNumber from "bignumber.js";
 import { useTranslation } from "react-i18next";
 import { Button } from "@stellar/design-system";
 
+import { NATIVE_TOKEN_CODE } from "@shared/constants/stellar";
 import { settingsNetworkDetailsSelector } from "popup/ducks/settings";
 import { transactionSubmissionSelector } from "popup/ducks/transactionSubmission";
 
@@ -74,7 +75,10 @@ const RenderedError = ({
         <>
           <div className="TrustlineError__title">{t("Not enough lumens")}</div>
           <div className="TrustlineError__body">
-            <p>0.500001 XLM {t("are required to add a new asset.")}</p>
+            <p>
+              0.500001 {NATIVE_TOKEN_CODE}{" "}
+              {t("are required to add a new asset.")}
+            </p>
             <p className="TrustlineError__links">
               <Link to="https://developers.stellar.org/docs/glossary/minimum-balance/#changes-to-transaction-fees-and-minimum-balances">
                 {t("Learn more about transaction fees")}

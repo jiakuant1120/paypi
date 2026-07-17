@@ -2,6 +2,7 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Asset } from "stellar-sdk";
 
+import { NATIVE_TOKEN_CODE } from "@shared/constants/stellar";
 import { AppDispatch } from "popup/App";
 import {
   transactionSubmissionSelector,
@@ -91,6 +92,8 @@ export const SelectAssetRows = ({
             const isScamAsset = isSuspicious || false;
             const isContract = isContractId(issuer);
             const canonical = getCanonicalFromAsset(code, issuer);
+            const isNative =
+              (code === NATIVE_TOKEN_CODE || code === "XLM") && !issuer;
             let isSoroswap = false;
 
             if (isSoroswapEnabled && isSwap) {
@@ -126,7 +129,7 @@ export const SelectAssetRows = ({
                 }}
               >
                 <AssetIcon
-                  assetIcons={code !== "XLM" ? { [canonical]: image } : {}}
+                  assetIcons={!isNative ? { [canonical]: image } : {}}
                   code={code}
                   issuerKey={issuer}
                   icon={icon}

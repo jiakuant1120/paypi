@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { Button, Icon, Loader, Notification } from "@stellar/design-system";
 import { BASE_FEE, Transaction, TransactionBuilder } from "stellar-sdk";
 
-import { NetworkDetails } from "@shared/constants/stellar";
+import { NATIVE_TOKEN_CODE, NetworkDetails } from "@shared/constants/stellar";
 import { RequestState } from "constants/request";
 import {
   getCanonicalFromAsset,
@@ -259,7 +259,7 @@ export const ChangeTrustInternal = ({
               className="ChangeTrustInternal__Metadata__Value"
               data-testid="ChangeTrustInternal__Metadata__Value__Fee"
             >
-              <span>{`${fee} XLM`}</span>
+              <span>{`${fee} ${NATIVE_TOKEN_CODE}`}</span>
             </div>
           </div>
         </div>
@@ -448,7 +448,7 @@ export const ChangeTrustInternal = ({
                     >
                       <div className="action-copy">
                         <div className="ChangeTrustInternal__options-actions__label">
-                          {t("Fee")}: {`${fee} XLM`}
+                          {t("Fee")}: {`${fee} ${NATIVE_TOKEN_CODE}`}
                         </div>
                         <Icon.Route />
                       </div>

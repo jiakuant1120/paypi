@@ -10,7 +10,7 @@ import {
 } from "@shared/api/types";
 import { Balances, BalanceMap } from "@shared/api/types/backend-api";
 import { AssetType } from "@shared/api/types/account-balance";
-import { NetworkDetails } from "@shared/constants/stellar";
+import { NATIVE_TOKEN_CODE, NetworkDetails } from "@shared/constants/stellar";
 import { SorobanTokenInterface } from "@shared/constants/soroban/token";
 export { isSorobanIssuer } from "@shared/helpers/stellar";
 
@@ -44,7 +44,7 @@ export const sortBalances = (
     return collection;
   }
 
-  // put XLM at the top of the balance list, LP shares last
+  // put native at the top of the balance list, LP shares last
   Object.entries(balances).forEach(([k, v]) => {
     if (k === "native") {
       collection.unshift(v);
@@ -196,7 +196,10 @@ export const sortOperationsByAsset = async ({
     if (getIsPayment(op.type)) {
       Object.keys(assetOperationMap).forEach((assetKey) => {
         const asset = getAssetFromCanonical(assetKey);
-        const assetCode = asset.code === "XLM" ? "native" : asset.code;
+        const assetCode =
+          asset.code === NATIVE_TOKEN_CODE || asset.code === "XLM"
+            ? "native"
+            : asset.code;
         const assetIssuer = asset.issuer;
 
         if (

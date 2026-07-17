@@ -3,6 +3,7 @@ import BigNumber from "bignumber.js";
 import { Heading, Icon, Text } from "@stellar/design-system";
 import { useTranslation } from "react-i18next";
 
+import { NATIVE_TOKEN_CODE } from "@shared/constants/stellar";
 import { RequestState, type State } from "constants/request";
 import { SimulateTxData } from "types/transactions";
 
@@ -67,7 +68,7 @@ export const FeesPane = ({
             >
               {isError
                 ? "—"
-                : `${simulationState.data?.inclusionFee ?? fee} XLM`}
+                : `${simulationState.data?.inclusionFee ?? fee} ${NATIVE_TOKEN_CODE}`}
             </Text>
           </div>
         )}
@@ -85,7 +86,7 @@ export const FeesPane = ({
               {isError
                 ? "—"
                 : simulationState.data?.resourceFee
-                  ? `${simulationState.data.resourceFee} XLM`
+                  ? `${simulationState.data.resourceFee} ${NATIVE_TOKEN_CODE}`
                   : t("None")}
             </Text>
           </div>
@@ -104,7 +105,7 @@ export const FeesPane = ({
             className="FeesPane__Card__Row__Value FeesPane__Card__Row__Value--total"
             data-testid="review-tx-total-fee"
           >
-            {isError ? "—" : `${liveTotal} XLM`}
+            {isError ? "—" : `${liveTotal} ${NATIVE_TOKEN_CODE}`}
           </Text>
         </div>
       </div>

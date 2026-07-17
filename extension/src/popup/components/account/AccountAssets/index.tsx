@@ -7,6 +7,7 @@ import BigNumber from "bignumber.js";
 import isEqual from "lodash/isEqual";
 
 import { ApiTokenPrices, AssetIcons, Balance } from "@shared/api/types";
+import { NATIVE_TOKEN_CODE } from "@shared/constants/stellar";
 import { retryAssetIcon } from "@shared/api/internal";
 import { AccountBalances } from "helpers/hooks/useGetBalances";
 
@@ -39,7 +40,7 @@ import { BalanceRow } from "popup/components/BalanceRow";
 import "./styles.scss";
 import { AssetDetail } from "../AssetDetail";
 
-const getIsXlm = (code: string) => code === "XLM";
+const getIsXlm = (code: string) => code === NATIVE_TOKEN_CODE || code === "XLM";
 
 export const SorobanTokenIcon = ({ noMargin }: { noMargin?: boolean }) => (
   <div

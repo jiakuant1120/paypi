@@ -1,4 +1,10 @@
-import { NetworkDetails, NETWORKS } from "@shared/constants/stellar";
+import { Asset } from "stellar-sdk";
+
+import {
+  NATIVE_TOKEN_CODE,
+  NetworkDetails,
+  NETWORKS,
+} from "@shared/constants/stellar";
 import {
   AssetsLists,
   AssetsListKey,
@@ -8,6 +14,10 @@ import {
 
 import { getApiStellarExpertUrl } from "popup/helpers/account";
 import { getCombinedAssetListData } from "@shared/api/helpers/token-list";
+import {
+  getPiTokenRegistryUrl,
+  piTokenListToStellarExpertSearch,
+} from "@shared/api/helpers/pi-token-list";
 
 export const searchAsset = async ({
   asset,
@@ -18,8 +28,14 @@ export const searchAsset = async ({
   networkDetails: NetworkDetails;
   signal?: AbortSignal;
 }) => {
+  const piTokenRegistryUrl = getPiTokenRegistryUrl({
+    networkDetails,
+    search: asset,
+    limit: 50,
+  });
   const res = await fetch(
-    `${getApiStellarExpertUrl(networkDetails)}/asset?search=${asset}`,
+    piTokenRegistryUrl ||
+      `${getApiStellarExpertUrl(networkDetails)}/asset?search=${asset}`,
     { signal },
   );
   // Surface backend outages instead of silently returning a non-records body:
@@ -28,28 +44,34 @@ export const searchAsset = async ({
   if (!res.ok) {
     throw new Error(res.statusText);
   }
-  return res.json();
+  const json = await res.json();
+  return piTokenRegistryUrl ? piTokenListToStellarExpertSearch(json) : json;
 };
 
 export const getNativeContractDetails = (networkDetails: NetworkDetails) => {
   const NATIVE_CONTRACT_DEFAULTS = {
-    code: "XLM",
+    code: NATIVE_TOKEN_CODE,
     decimals: 7,
-    domain: "https://stellar.org",
+    domain: "https://minepi.com",
     icon: "",
     org: "",
   };
+
+  const nativeContract = Asset.native().contractId(
+    networkDetails.networkPassphrase,
+  );
+
   switch (networkDetails.network as keyof typeof NETWORKS) {
     case NETWORKS.PUBLIC:
       return {
         ...NATIVE_CONTRACT_DEFAULTS,
-        contract: "CAS3J7GYLGXMF6TDJBBYYSE3HQ6BBSMLNUQ34T6TZMYMW2EVH34XOWMA",
-        issuer: "GDMTVHLWJTHSUDMZVVMXXH6VJHA2ZV3HNG5LYNAZ6RTWB7GISM6PGTUV",
+        contract: nativeContract,
+        issuer: "",
       };
     case NETWORKS.TESTNET:
       return {
         ...NATIVE_CONTRACT_DEFAULTS,
-        contract: "CDLZFC3SYJYDZT7K67VZ75HPJVIEUVNIXF47ZG2FB2RMQQVU2HHGCYSC",
+        contract: nativeContract,
         issuer: "",
       };
     default:

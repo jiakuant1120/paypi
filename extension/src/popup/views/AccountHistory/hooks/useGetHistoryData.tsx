@@ -47,7 +47,7 @@ import {
   trimTrailingZeros,
 } from "popup/helpers/formatters";
 import { getIconUrlFromIssuer } from "@shared/api/helpers/getIconUrlFromIssuer";
-import { NetworkDetails } from "@shared/constants/stellar";
+import { NATIVE_TOKEN_CODE, NetworkDetails } from "@shared/constants/stellar";
 import {
   formatTokenAmount,
   getAttrsFromSorobanHorizonOp,
@@ -449,12 +449,12 @@ const processAssetBalanceChanges = async (
       continue;
     }
 
-    // Extract asset info - handle native XLM specially
+    // Extract asset info - handle native PI specially
     let assetCode: string;
     let assetIssuer: string | null = null;
 
     if (change.asset_type === "native") {
-      assetCode = "XLM";
+      assetCode = NATIVE_TOKEN_CODE;
       assetIssuer = null;
     } else {
       assetCode = change.asset_code || "";
@@ -468,7 +468,7 @@ const processAssetBalanceChanges = async (
 
     // Get asset icon
     const icon =
-      assetCode === "XLM"
+      assetCode === "XLM" || assetCode === NATIVE_TOKEN_CODE
         ? StellarLogo
         : await getIconUrl({
             key: assetIssuer || "",
@@ -623,8 +623,8 @@ export const getRowDataByOpType = async (
     "source_asset_code" in operation ? operation.source_asset_code : "";
   const sourceAssetIssuer =
     "source_asset_issuer" in operation ? operation.source_asset_issuer : "";
-  const srcAssetCode = sourceAssetCode || "XLM";
-  const destAssetCode = assetCode || "XLM";
+  const srcAssetCode = sourceAssetCode || NATIVE_TOKEN_CODE;
+  const destAssetCode = assetCode || NATIVE_TOKEN_CODE;
   const srcAmount =
     "source_amount" in operation ? operation.source_amount : null;
 
@@ -636,7 +636,7 @@ export const getRowDataByOpType = async (
       : null;
 
     const destIcon =
-      destAssetCode === "XLM"
+      destAssetCode === "XLM" || destAssetCode === NATIVE_TOKEN_CODE
         ? StellarLogo
         : await getIconUrl({
             key: assetIssuer || "",
@@ -647,7 +647,7 @@ export const getRowDataByOpType = async (
             cachedTokenLists,
           });
     const sourceIcon =
-      srcAssetCode === "XLM"
+      srcAssetCode === "XLM" || srcAssetCode === NATIVE_TOKEN_CODE
         ? StellarLogo
         : await getIconUrl({
             key: sourceAssetIssuer || "",
@@ -703,7 +703,7 @@ export const getRowDataByOpType = async (
     const formattedAmount = `${paymentDifference}${nonLabelAmount} ${destAssetCode}`;
 
     const destIcon =
-      destAssetCode === "XLM"
+      destAssetCode === "XLM" || destAssetCode === NATIVE_TOKEN_CODE
         ? StellarLogo
         : await getIconUrl({
             key: assetIssuer || "",
@@ -865,7 +865,7 @@ export const getRowDataByOpType = async (
 
           const { symbol, decimals } = tokenDetailsResponse!;
           const isNative = symbol === "native";
-          const code = isNative ? "XLM" : symbol;
+          const code = isNative ? NATIVE_TOKEN_CODE : symbol;
           const formattedTokenAmount = formatTokenAmount(
             new BigNumber(attrs.amount),
             decimals,

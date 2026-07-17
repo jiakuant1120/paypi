@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { Button, Icon, Text } from "@stellar/design-system";
 import { Horizon } from "stellar-sdk";
 
+import { NATIVE_TOKEN_CODE, NetworkDetails } from "@shared/constants/stellar";
 import StellarLogo from "popup/assets/stellar-logo.png";
 
 import { emitMetric } from "helpers/metrics";
@@ -19,7 +20,6 @@ import {
   getActionIconByType,
   OperationDataRow,
 } from "popup/views/AccountHistory/hooks/useGetHistoryData";
-import { NetworkDetails } from "@shared/constants/stellar";
 import { getStellarExpertUrl } from "popup/helpers/account";
 import { getMemoDisabledState } from "helpers/muxedAddress";
 
@@ -180,7 +180,7 @@ export const TransactionDetail = ({
 
     return [
       {
-        assetCode: "XLM",
+        assetCode: NATIVE_TOKEN_CODE,
         assetIssuer: null,
         decimals: 7,
         amount: nonLabelAmount,
@@ -374,7 +374,7 @@ export const TransactionDetail = ({
             {t("Fee")}
           </div>
           <div className="Metadata__value">
-            {stroopToXlm(feeCharged as string).toString()} XLM
+            {stroopToXlm(feeCharged as string).toString()} {NATIVE_TOKEN_CODE}
           </div>
         </div>
         {/* Hide memo row when memo is disabled (e.g., for all M addresses) */}

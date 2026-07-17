@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { captureException } from "@sentry/browser";
 import BigNumber from "bignumber.js";
 
-import { NetworkDetails } from "@shared/constants/stellar";
+import { NATIVE_TOKEN_CODE, NetworkDetails } from "@shared/constants/stellar";
 import { ApiTokenPrices, BlockAidScanAssetResult } from "@shared/api/types";
 import { AssetListResponse } from "@shared/constants/soroban/asset-list";
 import { getCombinedAssetListData } from "@shared/api/helpers/token-list";
@@ -109,8 +109,10 @@ const heldToRecord = (
     issuer?: { key: string };
   };
   const isNative =
-    token.type === "native" || (token.code === "XLM" && !token.issuer);
-  const code = isNative ? "XLM" : token.code;
+    token.type === "native" ||
+    ((token.code === NATIVE_TOKEN_CODE || token.code === "XLM") &&
+      !token.issuer);
+  const code = isNative ? NATIVE_TOKEN_CODE : token.code;
   const issuer = isNative ? "" : token.issuer?.key || "";
   const canonical = isNative ? "native" : getCanonicalFromAsset(code, issuer);
 
@@ -172,7 +174,8 @@ const currencyToRecord = (
   asset: ManageAssetCurrency,
   isHeld: boolean,
 ): SwapTokenRecord => {
-  const isNative = asset.code === "XLM" && !asset.issuer;
+  const isNative =
+    (asset.code === NATIVE_TOKEN_CODE || asset.code === "XLM") && !asset.issuer;
   const canonical = isNative
     ? "native"
     : getCanonicalFromAsset(asset.code || "", asset.issuer || "");
@@ -335,7 +338,7 @@ export const buildSwapSections = ({
 /**
  * Stamps a securityLevel onto each SwapTokenRecord based on the bulk-scan result map.
  * The map is keyed by "CODE-ISSUER" (matching how scanAssetBulk IDs are built).
- * Native XLM (no issuer) is always trusted and left unmodified.
+ * Native PI (no issuer) is always trusted and left unmodified.
  */
 export const mergeScanResults = ({
   rows,
@@ -354,7 +357,7 @@ export const mergeScanResults = ({
 }): SwapTokenRecord[] =>
   rows.map((row) => {
     if (!row.issuer) {
-      // Native XLM — always trusted
+      // Native PI — always trusted
       return row;
     }
     const scan = scanResults[`${row.code}-${row.issuer}`];

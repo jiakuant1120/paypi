@@ -1,5 +1,4 @@
 import { Store } from "redux";
-import StellarHDWallet from "stellar-hd-wallet";
 
 import { RecoverAccountMessage } from "@shared/api/types/message-request";
 import { removePreviousAccount } from "../helpers/remove-previous-account";
@@ -24,8 +23,7 @@ import { captureException } from "@sentry/browser";
 import { APPLICATION_STATE } from "@shared/constants/applicationState";
 import { MAINNET_NETWORK_DETAILS } from "@shared/constants/stellar";
 import { activatePublicKey } from "../helpers/activate-public-key";
-
-const { fromMnemonic } = StellarHDWallet;
+import { derivePiKeyPair, getPiWallet } from "background/helpers/piKeypair";
 
 export const recoverAccount = async ({
   request,
@@ -43,7 +41,7 @@ export const recoverAccount = async ({
   numOfPublicKeysToCheck: number;
 }) => {
   const { password, recoverMnemonic, isOverwritingAccount } = request;
-  let wallet;
+  let isValidMnemonic = false;
   let applicationState;
   let error = "";
 
@@ -52,17 +50,18 @@ export const recoverAccount = async ({
   }
 
   try {
-    wallet = fromMnemonic(recoverMnemonic);
+    getPiWallet(recoverMnemonic);
+    isValidMnemonic = true;
   } catch (e) {
     console.error(e);
     error = "Invalid mnemonic phrase";
   }
 
-  if (wallet) {
-    const keyPair = {
-      publicKey: wallet.getPublicKey(0),
-      privateKey: wallet.getSecret(0),
-    };
+  if (isValidMnemonic) {
+    const keyPair = derivePiKeyPair({
+      mnemonicPhrase: recoverMnemonic,
+      index: 0,
+    });
 
     // resets accounts list
     sessionStore.dispatch(reset());
@@ -109,8 +108,11 @@ export const recoverAccount = async ({
 
     for (let i = 1; i <= numOfPublicKeysToCheck; i += 1) {
       try {
-        const publicKey = wallet.getPublicKey(i);
-        const privateKey = wallet.getSecret(i);
+        const newKeyPair = derivePiKeyPair({
+          mnemonicPhrase: recoverMnemonic,
+          index: i,
+        });
+        const { publicKey } = newKeyPair;
 
         const resp = await fetch(
           `${MAINNET_NETWORK_DETAILS.networkUrl}/accounts/${publicKey}`,
@@ -118,11 +120,6 @@ export const recoverAccount = async ({
 
         const j = await resp.json();
         if (j.account_id) {
-          const newKeyPair = {
-            publicKey,
-            privateKey,
-          };
-
           await storeAccount({
             password,
             keyPair: newKeyPair,
@@ -145,7 +142,7 @@ export const recoverAccount = async ({
 
     // let's make the first public key the active one
     await activatePublicKey({
-      publicKey: wallet.getPublicKey(0),
+      publicKey: keyPair.publicKey,
       sessionStore,
       localStore,
     });

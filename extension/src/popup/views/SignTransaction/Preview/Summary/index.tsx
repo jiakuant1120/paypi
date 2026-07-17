@@ -2,6 +2,7 @@ import React from "react";
 import { MemoType } from "stellar-sdk";
 import { useTranslation } from "react-i18next";
 
+import { NATIVE_TOKEN_CODE } from "@shared/constants/stellar";
 import { stroopToXlm } from "helpers/stellar";
 import { CopyValue } from "popup/components/CopyValue";
 import { TruncatedMemo } from "popup/components/TruncatedMemo";
@@ -42,7 +43,7 @@ export const Summary = (props: SummaryProps) => {
           <p>{t("Fees")}</p>
         </div>
         <p className="TxInfoBlock__value">
-          {stroopToXlm(props.fee).toString()} XLM
+          {stroopToXlm(props.fee).toString()} {NATIVE_TOKEN_CODE}
         </p>
       </div>
       <div className="TxInfoBlock">

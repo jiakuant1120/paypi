@@ -1,5 +1,4 @@
 import { Store } from "redux";
-import StellarHDWallet from "stellar-hd-wallet";
 
 import { AddAccountMessage } from "@shared/api/types/message-request";
 import {
@@ -25,8 +24,7 @@ import {
   buildHasPrivateKeySelector,
   publicKeySelector,
 } from "background/ducks/session";
-
-const { fromMnemonic } = StellarHDWallet;
+import { derivePiKeyPair } from "background/helpers/piKeypair";
 
 export const addAccount = async ({
   request,
@@ -96,14 +94,10 @@ export const addAccount = async ({
     return { error: "Incorrect password" };
   }
 
-  const wallet = fromMnemonic(mnemonicPhrase);
   const keyNumber =
     Number(await localStore.getItem(KEY_DERIVATION_NUMBER_ID)) + 1;
 
-  const keyPair = {
-    publicKey: wallet.getPublicKey(keyNumber),
-    privateKey: wallet.getSecret(keyNumber),
-  };
+  const keyPair = derivePiKeyPair({ mnemonicPhrase, index: keyNumber });
 
   // Add the new account to our data store
   try {

@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { useFormik } from "formik";
 import BigNumber from "bignumber.js";
 import { captureException } from "@sentry/browser";
-import { BASE_RESERVE } from "@shared/constants/stellar";
+import { BASE_RESERVE, NATIVE_TOKEN_CODE } from "@shared/constants/stellar";
 import { Button, Icon, Notification } from "@stellar/design-system";
 
 import { View } from "popup/basics/layout/View";
@@ -487,9 +487,9 @@ export const SwapAmount = ({
                 <span className="SwapAsset__settings-fee-display__label">
                   {t("Fee")}:
                 </span>
-                {/* The network fee is always denominated in XLM, regardless of
+                {/* The network fee is always denominated in the native token, regardless of
                     whether the amount is being entered in crypto or fiat. */}
-                <span>{`${fee} XLM`}</span>
+                <span>{`${fee} ${NATIVE_TOKEN_CODE}`}</span>
               </div>
               <div className="SwapAsset__settings-options">
                 <Button

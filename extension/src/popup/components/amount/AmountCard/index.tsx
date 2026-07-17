@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 
 import { AssetIcon } from "popup/components/account/AccountAssets";
 import { AssetIcons } from "@shared/api/types";
+import { NATIVE_TOKEN_CODE } from "@shared/constants/stellar";
 import { SecurityLevel } from "popup/constants/blockaid";
 import { InputType } from "helpers/transaction";
 import { formatAmountPreserveCursor } from "popup/helpers/formatters";
@@ -241,16 +242,21 @@ export const AmountCard = ({
         >
           {assetCode ? (
             <>
-              <AssetIcon
-                assetIcons={
-                  assetIssuerKey || assetCode !== "XLM" ? assetIcons : {}
-                }
-                code={assetCode}
-                issuerKey={assetIssuerKey}
-                icon={assetIcon}
-                isSuspicious={isSuspicious}
-                isMalicious={isMalicious}
-              />
+              {(() => {
+                const isNative =
+                  (assetCode === NATIVE_TOKEN_CODE || assetCode === "XLM") &&
+                  !assetIssuerKey;
+                return (
+                  <AssetIcon
+                    assetIcons={assetIssuerKey || !isNative ? assetIcons : {}}
+                    code={assetCode}
+                    issuerKey={assetIssuerKey}
+                    icon={assetIcon}
+                    isSuspicious={isSuspicious}
+                    isMalicious={isMalicious}
+                  />
+                );
+              })()}
               <span className="AmountCard__asset-code">{assetCode}</span>
               <Icon.ChevronDown />
             </>

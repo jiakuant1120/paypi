@@ -1,5 +1,4 @@
 import { Store } from "redux";
-import StellarHDWallet from "stellar-hd-wallet";
 import * as StellarSdk from "stellar-sdk";
 import BigNumber from "bignumber.js";
 
@@ -35,8 +34,7 @@ import {
   storeEncryptedTemporaryData,
 } from "background/helpers/session";
 import { KEY_ID } from "constants/localStorageTypes";
-
-const { fromMnemonic } = StellarHDWallet;
+import { derivePiKeyPair, getPiWallet } from "background/helpers/piKeypair";
 
 export const migrateAccounts = async ({
   request,
@@ -63,7 +61,7 @@ export const migrateAccounts = async ({
     return { error: "Authentication error" };
   }
 
-  const newWallet = fromMnemonic(migratedMnemonicPhrase);
+  getPiWallet(migratedMnemonicPhrase);
   const keyIdList: string = await getKeyIdList({ localStore });
   const fee = xlmToStroop(recommendedFee).toFixed();
 
@@ -72,7 +70,7 @@ export const migrateAccounts = async ({
     NETWORK_URLS.PUBLIC,
     MAINNET_NETWORK_DETAILS.networkPassphrase,
   );
-  const networkPassphrase = StellarSdk.Networks.PUBLIC;
+  const networkPassphrase = MAINNET_NETWORK_DETAILS.networkPassphrase;
 
   /*
     For each migratable balance, we'll go through the following steps:
@@ -101,10 +99,10 @@ export const migrateAccounts = async ({
     const sourceAccount = await server.loadAccount(publicKey);
 
     // create a new keystore and migrate while replacing the keyId in the list
-    const newKeyPair = {
-      publicKey: newWallet.getPublicKey(keyIdIndex),
-      privateKey: newWallet.getSecret(keyIdIndex),
-    };
+    const newKeyPair = derivePiKeyPair({
+      mnemonicPhrase: migratedMnemonicPhrase,
+      index: keyIdIndex,
+    });
 
     const transaction = new StellarSdk.TransactionBuilder(sourceAccount, {
       fee,
@@ -227,8 +225,13 @@ export const migrateAccounts = async ({
   // if any of the accounts have been successfully migrated, go ahead and log in
   if (successfullyMigratedAccts.length) {
     // let's make the first public key the active one
+    const firstKeyPair = derivePiKeyPair({
+      mnemonicPhrase: migratedMnemonicPhrase,
+      index: 0,
+    });
+
     await activatePublicKey({
-      publicKey: newWallet.getPublicKey(0),
+      publicKey: firstKeyPair.publicKey,
       sessionStore,
       localStore,
     });
@@ -240,7 +243,7 @@ export const migrateAccounts = async ({
     await storeEncryptedTemporaryData({
       localStore,
       keyName: await localStore.getItem(KEY_ID),
-      temporaryData: newWallet.getSecret(0),
+      temporaryData: firstKeyPair.privateKey,
       hashKey,
     });
     await storeActiveHashKey({

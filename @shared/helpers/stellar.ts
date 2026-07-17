@@ -7,6 +7,7 @@ import { BalanceMap } from "@shared/api/types/backend-api";
 import {
   BASE_RESERVE,
   BASE_RESERVE_MIN_COUNT,
+  NATIVE_TOKEN_CODE,
   NetworkDetails,
 } from "@shared/constants/stellar";
 import { INDEXER_URL } from "@shared/constants/mercury";
@@ -115,7 +116,7 @@ export const makeDisplayableBalances = async (
       displayableBalances.native = {
         token: {
           type: "native",
-          code: "XLM",
+          code: NATIVE_TOKEN_CODE,
         },
         total,
         available,
@@ -199,7 +200,10 @@ export const getCanonicalFromAsset = (
   assetCode: string,
   assetIssuer?: string,
 ) => {
-  if (assetCode === "XLM" && !assetIssuer) {
+  if (
+    (assetCode === NATIVE_TOKEN_CODE || assetCode === "XLM") &&
+    !assetIssuer
+  ) {
     return "native";
   }
   if (!assetIssuer) {

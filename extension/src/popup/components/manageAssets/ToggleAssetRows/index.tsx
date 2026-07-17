@@ -3,6 +3,7 @@ import { Toggle } from "@stellar/design-system";
 import { useTranslation } from "react-i18next";
 
 import { AssetVisibility, IssuerKey } from "@shared/api/types";
+import { NATIVE_TOKEN_CODE } from "@shared/constants/stellar";
 import {
   formatDomain,
   getCanonicalFromAsset,
@@ -99,13 +100,14 @@ export const ToggleAssetRow = ({
   const { t } = useTranslation();
   const canonicalAsset = getCanonicalFromAsset(code, issuer);
   const assetCode = name || code;
+  const isNative = (code === NATIVE_TOKEN_CODE || code === "XLM") && !issuer;
   const truncatedAssetCode =
     assetCode.length > 20 ? truncateString(assetCode) : assetCode;
 
   return (
     <>
       <AssetIcon
-        assetIcons={code !== "XLM" ? { [canonicalAsset]: image } : {}}
+        assetIcons={!isNative ? { [canonicalAsset]: image } : {}}
         code={code}
         issuerKey={issuer}
         isSuspicious={isSuspicious}

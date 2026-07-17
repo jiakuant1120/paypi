@@ -73,7 +73,7 @@ interface SimSoroban {
   xdr: string;
 }
 
-const CREATE_ACCOUNT_MIN_XLM = new BigNumber(1);
+const CREATE_ACCOUNT_MIN_NATIVE = new BigNumber(1);
 
 /**
  * Returns the translated user-facing reason why a transaction is expected
@@ -83,7 +83,7 @@ const CREATE_ACCOUNT_MIN_XLM = new BigNumber(1);
  * `shouldCheckUnfundedDestinationWarning` in `popup/helpers/sendWarnings.ts`
  * so the same rule fires on both the Search-address screen
  * (`SendTo/index.tsx`) and here on Review. This branch overlays the
- * native ≥ 1 XLM create-account quantitative check, which only matters
+ * native >= 1 PI create-account quantitative check, which only matters
  * once the amount is finalized.
  */
 export const getExpectedToFailReason = ({
@@ -120,7 +120,7 @@ export const getExpectedToFailReason = ({
   }
 
   const parsedAmount = new BigNumber(cleanAmount(amount || "0"));
-  if (parsedAmount.lt(CREATE_ACCOUNT_MIN_XLM)) {
+  if (parsedAmount.lt(CREATE_ACCOUNT_MIN_NATIVE)) {
     return t("Blockaid unfunded destination native");
   }
 

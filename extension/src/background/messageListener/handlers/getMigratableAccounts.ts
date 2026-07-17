@@ -1,5 +1,4 @@
 import { Store } from "redux";
-import StellarHDWallet from "stellar-hd-wallet";
 
 import { allAccountsSelector } from "background/ducks/session";
 import { getKeyIdList } from "background/helpers/account";
@@ -7,8 +6,7 @@ import { DataStorageAccess } from "background/helpers/dataStorageAccess";
 import { getEncryptedTemporaryData } from "background/helpers/session";
 import { TEMPORARY_STORE_EXTRA_ID } from "constants/localStorageTypes";
 import { MigratableAccount } from "@shared/api/types";
-
-const { fromMnemonic } = StellarHDWallet;
+import { derivePiKeyPair } from "background/helpers/piKeypair";
 
 export const getMigratableAccounts = async ({
   localStore,
@@ -27,7 +25,6 @@ export const getMigratableAccounts = async ({
     keyName: TEMPORARY_STORE_EXTRA_ID,
   });
   const allAccounts = allAccountsSelector(sessionStore.getState());
-  const wallet = fromMnemonic(mnemonicPhrase);
 
   const mnemonicPublicKeyArr: string[] = [];
 
@@ -35,7 +32,9 @@ export const getMigratableAccounts = async ({
   const numberOfKeyIdsToCheck = keyIdList.length + numOfPublicKeysToCheck;
 
   for (let i = 0; i < numberOfKeyIdsToCheck; i += 1) {
-    mnemonicPublicKeyArr.push(wallet.getPublicKey(i));
+    mnemonicPublicKeyArr.push(
+      derivePiKeyPair({ mnemonicPhrase, index: i }).publicKey,
+    );
   }
 
   // only use accounts that were derived from the mnemonic phrase

@@ -1,18 +1,13 @@
 import BigNumber from "bignumber.js";
-import {
-  Account,
-  Asset,
-  hash,
-  MuxedAccount,
-  Networks,
-  StrKey,
-} from "stellar-sdk";
+import { Account, Asset, hash, MuxedAccount, StrKey } from "stellar-sdk";
 import isEqual from "lodash/isEqual";
 
 import {
+  MAINNET_NETWORK_DETAILS,
   FUTURENET_NETWORK_DETAILS,
   NETWORK_URLS,
   NetworkDetails,
+  TESTNET_NETWORK_DETAILS,
 } from "@shared/constants/stellar";
 export {
   getAssetFromCanonical,
@@ -297,14 +292,14 @@ export const isValidFederatedDomain = (input: string) => {
 export const isMainnet = (networkDetails: NetworkDetails) => {
   const { networkPassphrase } = networkDetails;
 
-  return networkPassphrase === Networks.PUBLIC;
+  return networkPassphrase === MAINNET_NETWORK_DETAILS.networkPassphrase;
 };
 
 export const isTestnet = (networkDetails: NetworkDetails) => {
   const { networkPassphrase, networkUrl } = networkDetails;
 
   return (
-    networkPassphrase === Networks.TESTNET &&
+    networkPassphrase === TESTNET_NETWORK_DETAILS.networkPassphrase &&
     networkUrl === NETWORK_URLS.TESTNET
   );
 };

@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { OperationRecord, Signer, xdr } from "stellar-sdk";
 
+import { NATIVE_TOKEN_CODE } from "@shared/constants/stellar";
 import {
   FLAG_TYPES,
   OPERATION_TYPES,
@@ -159,7 +160,7 @@ export const Operations = ({
             />
             <KeyValueList
               operationKey={t("Starting Balance")}
-              operationValue={`${startingBalance} XLM`}
+              operationValue={`${startingBalance} ${NATIVE_TOKEN_CODE}`}
             />
           </>
         );

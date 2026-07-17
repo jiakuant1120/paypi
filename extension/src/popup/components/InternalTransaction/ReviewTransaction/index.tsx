@@ -9,7 +9,7 @@ import {
   TransactionBuilder,
 } from "stellar-sdk";
 
-import { NetworkDetails } from "@shared/constants/stellar";
+import { NATIVE_TOKEN_CODE, NetworkDetails } from "@shared/constants/stellar";
 import { OPERATION_TYPES } from "constants/transaction";
 import { decodeMemo } from "popup/helpers/parseTransaction";
 import { Summary } from "popup/views/SignTransaction/Preview/Summary";
@@ -522,7 +522,7 @@ export const ReviewTx = ({
             >
               <Icon.InfoCircle />
             </button>
-            {fee} XLM
+            {fee} {NATIVE_TOKEN_CODE}
           </div>
         </div>
         {/* The raw XDR is in the "Transaction details" sheet (Summary),
