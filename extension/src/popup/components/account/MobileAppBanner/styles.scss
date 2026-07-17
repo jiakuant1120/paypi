@@ -59,6 +59,7 @@
     img {
       width: pxToRem(40px);
       height: pxToRem(40px);
+      border-radius: pxToRem(7px);
       object-fit: contain;
     }
   }

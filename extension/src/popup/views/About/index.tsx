@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { SubviewHeader } from "popup/components/SubviewHeader";
 import { View } from "popup/basics/layout/View";
 
-import FreighterLogo from "popup/assets/logo-freighter-welcome-2.svg";
+import PayPiLogo from "popup/assets/logo-paypi.png";
 
 import "./styles.scss";
 
@@ -33,7 +33,11 @@ export const About = () => {
       <View.Content hasNoTopPadding>
         <div className="About">
           <div>
-            <img alt={t("Freighter logo")} src={FreighterLogo} />
+            <img
+              className="About__logo"
+              alt={t("Freighter logo")}
+              src={PayPiLogo}
+            />
           </div>
           <div className="About__body">
             <div className="About__info">

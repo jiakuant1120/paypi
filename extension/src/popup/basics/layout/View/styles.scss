@@ -28,8 +28,9 @@
     flex-grow: 0;
 
     &__logo {
-      width: pxToRem(114px);
-      height: pxToRem(30px);
+      width: pxToRem(32px);
+      height: pxToRem(32px);
+      border-radius: pxToRem(6px);
       display: block;
     }
 

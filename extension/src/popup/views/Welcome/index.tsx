@@ -7,7 +7,7 @@ import { ROUTES } from "popup/constants/routes";
 import { navigateTo } from "popup/helpers/navigate";
 import { View } from "popup/basics/layout/View";
 
-import LogoWelcome from "popup/assets/logo-freighter-welcome-2.svg";
+import PayPiLogo from "popup/assets/logo-paypi.png";
 
 import "./styles.scss";
 
@@ -20,7 +20,11 @@ export const Welcome = () => {
       <View.Content>
         <div className="Welcome__column">
           <div className="Welcome__centered-screen">
-            <img src={LogoWelcome} alt={t("Freighter logo")} />
+            <img
+              className="Welcome__logo"
+              src={PayPiLogo}
+              alt={t("Freighter logo")}
+            />
             <div>
               <Heading addlClassName="Welcome__heading" as="h1" size="lg">
                 {t("Freighter Wallet")}

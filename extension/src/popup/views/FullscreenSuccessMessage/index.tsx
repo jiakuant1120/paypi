@@ -8,7 +8,7 @@ import { METRIC_NAMES } from "popup/constants/metricsNames";
 import { Onboarding, OnboardingModal } from "popup/components/Onboarding";
 import { View } from "popup/basics/layout/View";
 
-import LogoWelcome from "popup/assets/logo-freighter-welcome-2.svg";
+import PayPiLogo from "popup/assets/logo-paypi.png";
 
 import "./styles.scss";
 
@@ -33,7 +33,7 @@ export const FullscreenSuccessMessage = () => {
         </div>
         <div className="FullscreenSuccessMessage__pin__row">
           <div className="FullscreenSuccessMessage__pin__row__logo">
-            <img src={LogoWelcome} alt={t("Freighter logo")} />
+            <img src={PayPiLogo} alt={t("Freighter logo")} />
           </div>
           <div className="FullscreenSuccessMessage__pin__row__text">
             {t("Freighter - Stellar Wallet")}

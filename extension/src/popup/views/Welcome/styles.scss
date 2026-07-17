@@ -1,6 +1,12 @@
 @use "../../styles/utils.scss" as *;
 
 .Welcome {
+  &__logo {
+    width: pxToRem(104px);
+    height: pxToRem(104px);
+    border-radius: pxToRem(18px);
+  }
+
   &__column {
     display: flex;
     flex-direction: column;

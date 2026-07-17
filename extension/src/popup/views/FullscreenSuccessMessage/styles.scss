@@ -95,6 +95,7 @@
         img {
           width: #{pxToRem(24px)};
           height: #{pxToRem(24px)};
+          border-radius: #{pxToRem(4px)};
         }
       }
 

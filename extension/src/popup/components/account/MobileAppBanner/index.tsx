@@ -9,7 +9,7 @@ import {
 } from "@shared/api/internal";
 
 import { openTab } from "popup/helpers/navigate";
-import FreighterLogo from "popup/assets/logo-freighter-shadow.png";
+import PayPiLogo from "popup/assets/logo-paypi.png";
 
 import "./styles.scss";
 
@@ -61,7 +61,7 @@ export const MobileAppBanner = () => {
     >
       <div className="MobileAppBanner__content">
         <div className="MobileAppBanner__logo">
-          <img src={FreighterLogo} alt="Freighter logo" />
+          <img src={PayPiLogo} alt="PayPi logo" />
         </div>
         <div className="MobileAppBanner__text">
           <Text
