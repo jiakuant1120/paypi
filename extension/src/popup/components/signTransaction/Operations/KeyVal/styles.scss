@@ -1,0 +1,128 @@
+@use "../../../../styles/utils.scss" as *;
+
+// Path hops for a path payment, displayed as numbered cards.
+.PathList {
+  display: flex;
+  flex-direction: column;
+  gap: pxToRem(12px);
+  margin-top: pxToRem(12px);
+
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: pxToRem(8px);
+    color: var(--sds-clr-gray-11);
+    font-size: pxToRem(14px);
+
+    svg {
+      width: pxToRem(16px);
+      height: pxToRem(16px);
+    }
+  }
+
+  &__card {
+    display: flex;
+    flex-direction: column;
+    gap: pxToRem(12px);
+    padding: pxToRem(16px);
+    border-radius: pxToRem(16px);
+    background-color: var(--sds-clr-gray-03);
+  }
+
+  &__badge {
+    align-self: flex-start;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: pxToRem(28px);
+    height: pxToRem(28px);
+    border-radius: 50%;
+    background-color: var(--sds-clr-lilac-01);
+    border: 1px solid var(--sds-clr-lilac-06);
+    color: var(--sds-clr-lilac-11);
+    font-size: pxToRem(12px);
+    line-height: 1;
+  }
+
+  &__row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: pxToRem(8px);
+    color: var(--sds-clr-gray-12);
+
+    &--labels {
+      color: var(--sds-clr-gray-11);
+      font-size: pxToRem(14px);
+    }
+  }
+}
+
+.OperationParameters {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+
+  .CopyText {
+    &:not(:first-child) {
+      margin-top: pxToRem(12px);
+    }
+  }
+
+  .Parameters {
+    display: flex;
+    flex-direction: column;
+
+    .ParameterKey {
+      display: flex;
+      align-items: center;
+      color: var(--sds-clr-gray-11);
+
+      svg {
+        margin-left: pxToRem(8px);
+      }
+    }
+
+    .ParameterValue {
+      margin-top: pxToRem(8px);
+      word-break: break-word;
+    }
+  }
+
+  .Parameter {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    color: var(--sds-clr-gray-12);
+    white-space: pre;
+
+    &:not(:last-child) {
+      margin-bottom: pxToRem(12px);
+    }
+
+    .ParameterName {
+      color: var(--sds-clr-gray-11);
+    }
+
+    .CopyText {
+      width: 100%;
+
+      .Floater {
+        .CopyText__content {
+          width: 100%;
+
+          .CopyValue {
+            width: 100%;
+
+            .Value {
+              width: 100%;
+              display: block;
+              overflow: hidden;
+              text-overflow: ellipsis;
+            }
+          }
+        }
+      }
+    }
+  }
+}

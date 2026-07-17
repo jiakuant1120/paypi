@@ -1,0 +1,17 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "sourceRoot": "./src",
+    "baseUrl": "./src",
+    "declaration": true,
+    "declarationDir": "build/",
+    "outDir": "build/",
+    "rootDir": "../..",
+    "paths": {
+      "@shared/*": ["../../../@shared/*"]
+    },
+    "types": ["@testing-library/jest-dom", "node"]
+  },
+  "include": ["src"],
+  "exclude": ["build", "node_modules", "src/**/*.test.js"]
+}
