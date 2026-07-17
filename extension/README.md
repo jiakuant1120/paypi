@@ -6,16 +6,23 @@ This project builds a web extension
 
 ### Configure the backend
 
-You will need to add a backend for Freighter to connect to. You can configure
-this by adding an `.env` file at the path `extension/.env`.
+The extension uses a separate backend configuration for local development and
+production packages:
 
-Inside this file, set the following variables pointing to your own running
+- `yarn build` and `yarn start` read `extension/.env.development`.
+- `yarn build:production` reads `extension/.env.production`.
+
+Each file contains the following variables pointing to the corresponding
 backend instances:
 
 ```
 INDEXER_URL=<your freighter-backend V1 URL>
 INDEXER_V2_URL=<your freighter-backend V2 URL>
 ```
+
+The committed development configuration uses the local backend ports, while the
+production configuration uses the deployed PayPi backends. Environment
+variables supplied by CI or the shell take precedence over these files.
 
 To run the backends locally, clone and follow the setup instructions in
 [stellar/freighter-backend](https://github.com/stellar/freighter-backend) (V1)

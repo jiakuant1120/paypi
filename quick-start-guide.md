@@ -100,12 +100,10 @@ yarn setup            # Install deps + allow scripts
 
 ## Step 5: Configure environment
 
-Check if `extension/.env` exists. If not, copy the example and set the backend
-URLs:
+Backend URLs are stored separately for each build type:
 
-```bash
-cp extension/.env.example extension/.env
-```
+- `extension/.env.development` is used by local builds and `yarn start`.
+- `extension/.env.production` is used by production builds.
 
 Set `INDEXER_URL` and `INDEXER_V2_URL` to your running backend instances:
 
@@ -116,8 +114,7 @@ Set `INDEXER_URL` and `INDEXER_V2_URL` to your running backend instances:
   [stellar/freighter-backend-v2](https://github.com/stellar/freighter-backend-v2)
   (Go) — follow its README for setup and default local port
 
-If `extension/.env` already exists, verify it has both `INDEXER_URL` and
-`INDEXER_V2_URL` set.
+Verify that both selected files have `INDEXER_URL` and `INDEXER_V2_URL` set.
 
 ## Step 6: Verify
 

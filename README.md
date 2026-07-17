@@ -43,8 +43,12 @@ This will generate the files that make up the extension in `extension/build`
 
 ## Configure environment variables
 
-Before starting the dev server, you need to configure the backend URLs. Create a
-file `extension/.env` with the following variables:
+Backend URLs are selected automatically by build type:
+
+- `extension/.env.development` is used by local builds.
+- `extension/.env.production` is used by production builds.
+
+Both files contain the following variables:
 
 ```
 INDEXER_URL=your_backend_v1_prod_url_here

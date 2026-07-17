@@ -10960,17 +10960,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"dotenv@npm:16.6.1, dotenv@npm:^16.3.1, dotenv@npm:^16.4.0":
+  version: 16.6.1
+  resolution: "dotenv@npm:16.6.1"
+  checksum: 10c0/15ce56608326ea0d1d9414a5c8ee6dcf0fffc79d2c16422b4ac2268e7e2d76ff5a572d37ffe747c377de12005f14b3cc22361e79fc7f1061cce81f77d2c973dc
+  languageName: node
+  linkType: hard
+
 "dotenv@npm:^14.0.0":
   version: 14.3.2
   resolution: "dotenv@npm:14.3.2"
   checksum: 10c0/cb428358aa3a8da735be727f8a9de56e148ddf97d84a75e528039dc90e55787688766e48204a50b8326ba1ebaa6e039584c1019dfc28fa144e68145d8cbe5946
-  languageName: node
-  linkType: hard
-
-"dotenv@npm:^16.3.1, dotenv@npm:^16.4.0":
-  version: 16.6.1
-  resolution: "dotenv@npm:16.6.1"
-  checksum: 10c0/15ce56608326ea0d1d9414a5c8ee6dcf0fffc79d2c16422b4ac2268e7e2d76ff5a572d37ffe747c377de12005f14b3cc22361e79fc7f1061cce81f77d2c973dc
   languageName: node
   linkType: hard
 
@@ -12329,6 +12329,7 @@ __metadata:
     concurrently: "npm:10.0.3"
     copy-webpack-plugin: "npm:14.0.0"
     css-loader: "npm:7.1.4"
+    dotenv: "npm:16.6.1"
     dotenv-webpack: "npm:9.0.0"
     fetch: "npm:1.1.0"
     fork-ts-checker-webpack-plugin: "npm:9.1.0"
@@ -12387,6 +12388,9 @@ __metadata:
     url: "npm:0.11.4"
     util: "npm:0.12.5"
     webextension-polyfill: "npm:0.12.0"
+    webpack: "npm:5.107.2"
+    webpack-cli: "npm:7.2.1"
+    webpack-merge: "npm:6.0.1"
     yup: "npm:1.7.1"
   languageName: unknown
   linkType: soft
